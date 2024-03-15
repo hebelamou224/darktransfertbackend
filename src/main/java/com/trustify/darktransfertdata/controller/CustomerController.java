@@ -44,7 +44,7 @@ public class CustomerController {
     public List<Customer> findByOperationType(@RequestParam Operation type){
         return this.customerService.findByOperationType(type);
     }
-/*
+    /*
     @GetMapping("/customer/transaction")
     public List<Customer> findByOperationStatus(@RequestParam boolean status){
         return this.customerService.findByOperationStatus(status);
