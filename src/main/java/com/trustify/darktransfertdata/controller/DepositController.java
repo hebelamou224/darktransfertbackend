@@ -8,13 +8,41 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 @RestController
+@RequestMapping(path = "operation")
 public class DepositController {
 
     private CustomerService customerService;
     private DepositService depositService;
+
+
+    /**
+     * Get all operation saved in database
+     * @return The lists operation
+     */
+    @GetMapping
+    public Iterable<Operation> findAllOperation(){
+        return depositService.findAll();
+    }
+
+    /**
+     * Find an operation by code
+     * @param code for searching operation
+     * @return the operation entities if is existed or null else
+     */
+    @GetMapping("/{code}")
+    public Operation findByCode(@PathVariable String code){
+        return depositService.findByCode(code);
+    }
+
+    @GetMapping("/")
+    public Operation findByCodeWithdrawal(@RequestParam(required = false) String codeWithdrawal){
+        return depositService.findByCodeWithdrawal(codeWithdrawal);
+    }
 
     /**
      * Post deposit in database
@@ -27,42 +55,26 @@ public class DepositController {
     }
 
     /**
-     * Get all operation saved in database
-     * @return The lists operation
+     * Method for the withdrawal in a deposit
+     * @param customer For the withdrawal
+     * @param code for the operation deposit
+     * @return The entities operation with the personal which do the withdrawal
      */
-    @GetMapping(path = "op")
-    public Iterable<Operation> findAllTransaction(){
-        return depositService.findAll();
-    }
-
-    /**
-     * Get all customer with each operation own self
-     * @return The list customer with each operation
-     */
-    @GetMapping("/")
-    public Iterable<Customer> findAllTransactionWithCustomer(){
-        return customerService.findAllTransactionWithCustomer();
-    }
-
-    /**
-     * Find an operation by code
-     * @param code for searching operation
-     * @return the operation entities if is existed or null else
-     */
-    @GetMapping("/op/{code}")
-    public Operation findByCode(@PathVariable String code){
-        return depositService.findByCode(code);
-    }
-
     @PostMapping("/withdrawal/{code}")
     public Customer withdrawal(@RequestBody Customer customer, @PathVariable String code){
         return this.depositService.withdrawal(customer,code);
     }
 
-    @GetMapping("/operation/{id}")
-    public Operation findByOperation(@PathVariable Long id){
-        return depositService.findById(id);
+    /**
+     * Get all operation by type(DEPOSIT or WITHDRAWAL)
+     * @param type Of operation
+     * @return A list which contains the corresponding operation type
+     */
+    @GetMapping("/type/{type}")
+    public List<Operation> findByType(@PathVariable com.trustify.darktransfertdata.Operation type){
+        return this.depositService.findByType(type);
     }
+
 
 
 }

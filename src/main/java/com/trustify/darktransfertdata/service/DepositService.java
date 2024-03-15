@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,4 +104,17 @@ public class DepositService {
         }
         throw new RuntimeException("Code ne correspond pas à un depot");
     }
+
+    public List<Operation> findByType(com.trustify.darktransfertdata.Operation type){
+        return this.depositRepository.findAllByType(type);
+    }
+
+    public Operation findByCodeWithdrawal(String codeWithdrawal){
+        Optional<Operation> operation = this.depositRepository.findOperationByCodeWithdrawal(codeWithdrawal);
+        if(operation.isPresent())
+            return operation.get();
+
+        throw new RuntimeException("Ce code de retrait nexiste pas");
+    }
+
 }
