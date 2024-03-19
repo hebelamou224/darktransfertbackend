@@ -23,8 +23,7 @@ public class Employee {
     private String address;
     private String telephone;
     private Instant dateRegister;
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String role;
     @OneToOne(cascade = CascadeType.ALL)
     private Agency agency;
 }

@@ -31,4 +31,9 @@ public class EmployeeController {
         return this.employeeService.put(employee, username, identify);
     }
 
+    @GetMapping("/{username}")
+    public Employee findByUsername(@PathVariable String username) {
+        return this.employeeService.findByUsername(username);
+    }
+
 }

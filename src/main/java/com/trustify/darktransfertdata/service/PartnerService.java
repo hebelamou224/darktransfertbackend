@@ -8,6 +8,7 @@ import com.trustify.darktransfertdata.repository.PartnerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +19,19 @@ public class PartnerService {
     private PartnerRepository partnerRepository;
     private AgencyRepository agencyRepository;
 
-    public Partner save(Partner partner) {
-        return this.partnerRepository.save(partner);
+    public String save(Partner partner) {
+        Optional<Partner> optionalPartner = this.partnerRepository.findByUsername(partner.getUsername());
+        if (optionalPartner.isPresent())
+            return "username_existe";
+
+        partner.setDateRegister(Instant.now());
+        this.partnerRepository.save(partner);
+        return "succes";
     }
 
-    public Partner addEmployeeForAnAgency(String username, String identifyAgency, Employee employee) {
+    public Partner addEmployeeForAnAgency(String usernamePartner, String identifyAgency, Employee employee) {
 
-        Optional<Partner> optionalPartner = this.partnerRepository.findByUsername(username);
+        Optional<Partner> optionalPartner = this.partnerRepository.findByUsername(usernamePartner);
         if (optionalPartner.isPresent()) {
             Partner partner = optionalPartner.get();
             Optional<Agency> optionalAgency = this.agencyRepository.findByIdentify(identifyAgency);
@@ -38,6 +45,7 @@ public class PartnerService {
                         break;
                     }
                 }
+                employee.setDateRegister(Instant.now());
                 agency.getEmployees().add(employee);
                 agencies.set(index, agency);
                 partner.setAgencies(agencies);
@@ -62,6 +70,16 @@ public class PartnerService {
         throw new RuntimeException("Cet identifiant ne coresspond a un partenaire");
     }
 
+    public List<Agency> findByUsernameAgencies(String username) {
+
+        List<Agency> agencyIterable;
+        Optional<Partner> optionalPartner = this.partnerRepository.findByUsername(username);
+        if (optionalPartner.isPresent()) {
+            agencyIterable = optionalPartner.get().getAgencies();
+            return agencyIterable;
+        }
+        throw new RuntimeException("Le nom d'utilsateur ne correspons pas a un partenaire");
+    }
 
     public Iterable<Partner> findByAll() {
         return this.partnerRepository.findAll();

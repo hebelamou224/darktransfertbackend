@@ -24,6 +24,14 @@ public class EmployeeService {
         return this.employeeRepository.save(employee);
     }
 
+    public Employee findByUsername(String username) {
+        Optional<Employee> employeeOptional = this.employeeRepository.findByUsername(username);
+        if (employeeOptional.isPresent()) {
+            return employeeOptional.get();
+        }
+        throw new RuntimeException("Ce nom d'utilisateur ne correspond pas a un employee");
+    }
+
     public Employee put(Employee employee, String username, String identityAgency) {
 
         Optional<Agency> agency = this.agencyRepository.findByIdentify(identityAgency);

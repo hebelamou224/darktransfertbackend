@@ -5,17 +5,28 @@ import com.trustify.darktransfertdata.model.Employee;
 import com.trustify.darktransfertdata.model.Partner;
 import com.trustify.darktransfertdata.service.PartnerService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/partner")
+@RequestMapping(value = "/partner",
+        produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+        })
 public class PartnerController {
 
     private PartnerService partnerService;
 
-    @PostMapping("/add")
-    public Partner save(@RequestBody Partner partner) {
+    @PostMapping(value = "/add", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    },
+            produces = {
+                    "application/json",
+                    "application/x-www-form-urlencoded;charset=UTF-8"
+            })
+    public String save(Partner partner) {
         return this.partnerService.save(partner);
     }
 
@@ -24,18 +35,24 @@ public class PartnerController {
         return this.partnerService.findByAll();
     }
 
-    @PutMapping("/addEmployeeToAgency/{username}")
+    @PutMapping(value = "/addEmployeeToAgency/{username}", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    })
     public Partner addEmployeeForAnAgency(
-            @RequestBody Employee employee,
+            Employee employee,
             @PathVariable String username,
             @RequestParam String identify
     ) {
         return this.partnerService.addEmployeeForAnAgency(username, identify, employee);
     }
 
-    @PutMapping("/addAgencyForPartner/{username}")
+    @PutMapping(value = "/addAgencyForPartner/{username}", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    })
     public Partner addAgencyForPartner(
-            @RequestBody Agency agency,
+            Agency agency,
             @PathVariable String username
     ) {
         return this.partnerService.addAgencyForPartner(username, agency);
