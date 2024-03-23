@@ -37,7 +37,7 @@ public class EmployeeService {
         Optional<Agency> agency = this.agencyRepository.findByIdentify(identityAgency);
         if (this.employeeRepository.findByUsername(username).isPresent()) {
             if (agency.isPresent()) {
-                employee.setAgency(agency.get());
+                // employee.setAgency(agency.get());
                 employee.setUsername(username);
                 employee.setId(this.employeeRepository.findByUsername(username).get().getId());
                 employee.setDateRegister(Instant.now());
@@ -49,6 +49,11 @@ public class EmployeeService {
                 throw new RuntimeException("Cet identifiant ne correspond pas à une agence");
         } else
             throw new RuntimeException("Cet employee n'existe pas");
+    }
+
+    public Employee findEmployeeByUsernameAndPassword(String username, String password) {
+        Optional<Employee> optionalEmployee = this.employeeRepository.findEmployeeByUsernameAndPassword(username, password);
+        return optionalEmployee.orElse(null);
     }
 
     public Iterable<Employee> findAll() {

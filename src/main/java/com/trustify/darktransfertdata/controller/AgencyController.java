@@ -21,7 +21,7 @@ public class AgencyController {
         return this.agencyService.save(agency);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Iterable<Agency> findAll() {
         return this.agencyService.findAll();
     }
@@ -29,6 +29,24 @@ public class AgencyController {
     @GetMapping("/{usernamePartner}")
     public List<Agency> findByUsernamePartnerAgencies(@PathVariable String usernamePartner) {
         return this.partnerService.findByUsernameAgencies(usernamePartner);
+    }
+
+    @PutMapping("/{identifyAgency}")
+    public Agency depositOnAccountAgency(@PathVariable String identifyAgency, @RequestParam String usernamePartner, @RequestParam double amount) {
+        return this.partnerService.depositOnAccountAgency(usernamePartner, identifyAgency, amount);
+    }
+
+    @PutMapping(value = "/update/{identityAgency}", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    })
+    public Agency updateAccountAgencyAfterOperationDeposit(@PathVariable String identityAgency, @RequestParam double amount) {
+        return this.agencyService.updateOnAccountAgencyAfterOperationDeposit(identityAgency, amount);
+    }
+
+    @GetMapping()
+    public Agency findByAgency(@RequestParam String identifyAgency) {
+        return this.agencyService.findByIdentify(identifyAgency);
     }
 
 }

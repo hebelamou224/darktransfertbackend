@@ -5,6 +5,7 @@ import com.trustify.darktransfertdata.model.Operation;
 import com.trustify.darktransfertdata.service.CustomerService;
 import com.trustify.darktransfertdata.service.DepositService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +14,9 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "operation")
+@RequestMapping(path = "operation", produces = {
+        MediaType.APPLICATION_JSON_VALUE,
+})
 public class DepositController {
 
     private CustomerService customerService;
@@ -49,9 +52,12 @@ public class DepositController {
      * @param customer Is a personal which do the operation
      * @return customer and operation if is done
      */
-    @PostMapping("/deposit")
-    public Customer deposit(@RequestBody Customer customer){
-        return depositService.deposit(customer);
+    @PostMapping(value = "/deposit", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    })
+    public Customer deposit(Customer customer, @RequestParam double amount) {
+        return depositService.deposit(customer, amount);
     }
 
     /**

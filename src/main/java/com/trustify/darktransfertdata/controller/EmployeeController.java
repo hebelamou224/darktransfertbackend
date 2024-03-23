@@ -17,7 +17,7 @@ public class EmployeeController {
         return this.employeeService.save(employee);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Iterable<Employee> findAll() {
         return this.employeeService.findAll();
     }
@@ -34,6 +34,13 @@ public class EmployeeController {
     @GetMapping("/{username}")
     public Employee findByUsername(@PathVariable String username) {
         return this.employeeService.findByUsername(username);
+    }
+
+    @GetMapping
+    public Employee findEmployeeByUsernameAndPassword(
+            @RequestParam String username,
+            @RequestParam String password) {
+        return this.employeeService.findEmployeeByUsernameAndPassword(username, password);
     }
 
 }

@@ -24,6 +24,8 @@ public class Employee {
     private String telephone;
     private Instant dateRegister;
     private String role;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Agency agency;
+    private String identifyAgency;
+    private String password;
+    //@OneToOne(cascade = CascadeType.ALL)
+    //private Agency agency;
 }

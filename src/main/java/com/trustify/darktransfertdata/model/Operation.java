@@ -23,7 +23,7 @@ public class Operation {
     private double amount;
     private String code;
     private String codeWithdrawal;
-    private Date date;
+    private Date dateDeposit;
     private Instant dateWithdrawal;
     private boolean status=false;
 

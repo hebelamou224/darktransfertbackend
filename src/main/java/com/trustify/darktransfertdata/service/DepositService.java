@@ -33,18 +33,17 @@ public class DepositService {
                 date;
     }
 
-    public Customer deposit(Customer customer){
+    public Customer deposit(Customer customer, double amount) {
 
+        Operation operation = new Operation();
         customer.setIdentify(generateIdentifyCustomer(customer));
-
-        if(customer.getOperation().getType() == com.trustify.darktransfertdata.Operation.DEPOSIT)
-            customer.getOperation().setCode(generateIdentifyCustomer(customer));
-        else
-            throw new RuntimeException("Cette operation est inconnue");
-
-        customer.getOperation().setDate(new Date());
-        customer.getOperation().setDateWithdrawal(null);
-        customer.getOperation().setCodeWithdrawal(null);
+        operation.setCode(generateIdentifyCustomer(customer));//the code for withdrawal
+        operation.setDateDeposit(new Date());
+        operation.setDateWithdrawal(null);
+        operation.setCodeWithdrawal("");
+        operation.setAmount(amount);
+        operation.setType(com.trustify.darktransfertdata.Operation.DEPOSIT);
+        customer.setOperation(operation);
 
         return customerRepository.save(customer);
     }
@@ -81,7 +80,7 @@ public class DepositService {
                 //Create new operation(withdrawal)
                 Operation op = new Operation();
                 op.setAmount(operation.get().getAmount());
-                op.setDate(operation.get().getDate());
+                op.setDateDeposit(operation.get().getDateDeposit());
                 op.setCode(generateIdentifyCustomer(customer));
                 op.setStatus(true);
                 op.setCodeWithdrawal(code);

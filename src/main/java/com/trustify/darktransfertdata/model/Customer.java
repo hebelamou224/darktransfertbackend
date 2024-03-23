@@ -21,12 +21,15 @@ public class Customer {
     @Column(nullable = false,unique = true)
     private String identify;
     private String fullname;
-    private String address;
     private String telephone;
+    private String address;
+    private String numberIdentify;
+    private String mail;
+    private String fullnameRecever;
+    private String phoneRecever;
+    private String addressRecever;
+    private String mailRecever;
 
-   //@OneToMany(targetEntity = Operation.class, cascade = CascadeType.ALL)
-    //@OneToOne(targetEntity = Operation.class, cascade = CascadeType.ALL)
-    //@JoinColumn(name = "cp_fk", referencedColumnName = "id")
    @OneToOne(cascade = CascadeType.ALL)
    private Operation operation;
 }

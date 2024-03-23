@@ -46,6 +46,8 @@ public class PartnerService {
                     }
                 }
                 employee.setDateRegister(Instant.now());
+                employee.setIdentifyAgency(identifyAgency);
+                employee.setPassword("");
                 agency.getEmployees().add(employee);
                 agencies.set(index, agency);
                 partner.setAgencies(agencies);
@@ -80,6 +82,28 @@ public class PartnerService {
         }
         throw new RuntimeException("Le nom d'utilsateur ne correspons pas a un partenaire");
     }
+
+    public Agency depositOnAccountAgency(String usernamePartner, String identifyAgency, double amount) {
+        Optional<Partner> optionalPartner = partnerRepository.findByUsername(usernamePartner);
+        if (optionalPartner.isPresent()) {
+            Partner partner = optionalPartner.get();
+            List<Agency> agencies = partner.getAgencies();
+            int i;
+            for (i = 0; i < agencies.size(); i++) {
+                Agency agency = agencies.get(i);
+                if (agency.getIdentify().equals(identifyAgency)) {
+                    agency.setAccount(agency.getAccount() + amount);
+                    agencies.set(i, agency);
+                    break;
+                }
+            }
+            partner.setAgencies(agencies);
+            partnerRepository.save(partner);
+            return agencies.get(i);
+        }
+        return null;
+    }
+
 
     public Iterable<Partner> findByAll() {
         return this.partnerRepository.findAll();
