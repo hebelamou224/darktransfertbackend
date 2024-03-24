@@ -35,8 +35,6 @@ public class CustomerController {
 
     @GetMapping("/customer")
     public Customer findByIdentify(@RequestParam String identify){
-        if(identify == null)
-            return null;
         return this.customerService.findByIdentify(identify);
     }
 

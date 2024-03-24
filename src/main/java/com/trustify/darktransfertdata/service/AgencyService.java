@@ -1,10 +1,12 @@
 package com.trustify.darktransfertdata.service;
 
+import com.trustify.darktransfertdata.Operation;
 import com.trustify.darktransfertdata.model.Agency;
 import com.trustify.darktransfertdata.repository.AgencyRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,6 +32,20 @@ public class AgencyService {
         Optional<Agency> agencyOptional = this.agencyRepository.findByIdentify(identifyAgency);
         if (agencyOptional.isPresent()) {
             agencyOptional.get().setAccount(agencyOptional.get().getAccount() + amount);
+            return this.agencyRepository.save(agencyOptional.get());
+        }
+        return null;
+    }
+
+    public Agency updateOnAccountAgencyAfterOperation(String identifyAgency, double amount, String type) {
+        Optional<Agency> agencyOptional = this.agencyRepository.findByIdentify(identifyAgency);
+        if (agencyOptional.isPresent()) {
+            if (Objects.equals(type, "DEPOSIT")) {
+                agencyOptional.get().setAccount(agencyOptional.get().getAccount() + amount);
+            } else {
+                System.out.print("Withdrawal amount = " + amount + "GNF");
+                agencyOptional.get().setAccount(agencyOptional.get().getAccount() - amount);
+            }
             return this.agencyRepository.save(agencyOptional.get());
         }
         return null;

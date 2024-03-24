@@ -1,5 +1,6 @@
 package com.trustify.darktransfertdata.controller;
 
+import com.trustify.darktransfertdata.Operation;
 import com.trustify.darktransfertdata.model.Agency;
 import com.trustify.darktransfertdata.service.AgencyService;
 import com.trustify.darktransfertdata.service.PartnerService;
@@ -42,6 +43,11 @@ public class AgencyController {
     })
     public Agency updateAccountAgencyAfterOperationDeposit(@PathVariable String identityAgency, @RequestParam double amount) {
         return this.agencyService.updateOnAccountAgencyAfterOperationDeposit(identityAgency, amount);
+    }
+
+    @PutMapping("/updateAccount/{identityAgency}")
+    public Agency updateOnAccountAgencyAfterOperation(@PathVariable String identityAgency, @RequestParam double amount, @RequestParam String type) {
+        return this.agencyService.updateOnAccountAgencyAfterOperation(identityAgency, amount, type);
     }
 
     @GetMapping()

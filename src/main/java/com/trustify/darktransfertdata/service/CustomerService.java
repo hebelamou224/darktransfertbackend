@@ -35,10 +35,12 @@ public class CustomerService implements CustomerServiceInterface {
 
     public Customer findByIdentify(String identify){
         Optional<Customer> customerOptional = this.customerRepository.findByIdentify(identify);
-        if(customerOptional.isPresent())
-            return customerOptional.get();
-
-        throw new RuntimeException("Identifiant introuvale");
+        if (customerOptional.isPresent()) {
+            System.out.println(customerOptional.get());
+        } else {
+            System.out.println("Not data is present, identify = " + identify);
+        }
+        return customerOptional.orElse(null);
     }
 
     public List<Customer> findByOperationType(Operation type){

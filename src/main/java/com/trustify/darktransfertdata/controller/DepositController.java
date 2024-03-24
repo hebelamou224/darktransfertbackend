@@ -62,13 +62,12 @@ public class DepositController {
 
     /**
      * Method for the withdrawal in a deposit
-     * @param customer For the withdrawal
      * @param code for the operation deposit
      * @return The entities operation with the personal which do the withdrawal
      */
-    @PostMapping("/withdrawal/{code}")
-    public Customer withdrawal(@RequestBody Customer customer, @PathVariable String code){
-        return this.depositService.withdrawal(customer,code);
+    @PutMapping(value = "/withdrawal/{code}")
+    public Operation withdrawal(@PathVariable String code) {
+        return this.depositService.withdrawal(code);
     }
 
     /**

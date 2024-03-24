@@ -69,39 +69,25 @@ public class DepositService {
              throw new RuntimeException("Ce code ne correspond pas à une operation");
     }
 
-    public Customer withdrawal(Customer customer,String code){
+    public Operation withdrawal(String code) {
 
         Optional<Operation> operation = this.depositRepository.findByCode(code);
         if(operation.isPresent()){
             if(operation.get().getType() == com.trustify.darktransfertdata.Operation.DEPOSIT ){
-
-                customer.setIdentify(generateIdentifyCustomer(customer));
-
                 //Create new operation(withdrawal)
-                Operation op = new Operation();
-                op.setAmount(operation.get().getAmount());
-                op.setDateDeposit(operation.get().getDateDeposit());
-                op.setCode(generateIdentifyCustomer(customer));
-                op.setStatus(true);
-                op.setCodeWithdrawal(code);
-                op.setType(com.trustify.darktransfertdata.Operation.WITHDRAWAL);
+                Operation op;
+                op = operation.get();
+                op.setCodeWithdrawal(op.getCode());
                 op.setDateWithdrawal(Instant.now());
-
-                customer.setOperation(op);
-
-                //Update the information of operation
-                operation.get().setStatus(true);
-                operation.get().setDateWithdrawal(Instant.now());
-                operation.get().setCodeWithdrawal("OK");
-                this.depositRepository.save(operation.get());
-                return this.customerRepository.save(customer);
-
+                op.setStatus(true);
+                op.setType(com.trustify.darktransfertdata.Operation.WITHDRAWAL);
+                return this.depositRepository.save(op);
             }else {
-                throw new RuntimeException("Cette transaction n'est pas reconnue comme un depot");
+                return null;
             }
-
         }
-        throw new RuntimeException("Code ne correspond pas à un depot");
+        return null;
+        //throw new RuntimeException("Code ne correspond pas à un depot");
     }
 
     public List<Operation> findByType(com.trustify.darktransfertdata.Operation type){
