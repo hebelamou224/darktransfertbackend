@@ -3,7 +3,7 @@ package com.trustify.darktransfertdata.controller;
 import com.trustify.darktransfertdata.model.Customer;
 import com.trustify.darktransfertdata.model.Operation;
 import com.trustify.darktransfertdata.service.CustomerService;
-import com.trustify.darktransfertdata.service.DepositService;
+import com.trustify.darktransfertdata.service.OperationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -17,10 +17,10 @@ import java.util.List;
 @RequestMapping(path = "operation", produces = {
         MediaType.APPLICATION_JSON_VALUE,
 })
-public class DepositController {
+public class OperationController {
 
     private CustomerService customerService;
-    private DepositService depositService;
+    private OperationService depositService;
 
 
     /**
@@ -56,8 +56,8 @@ public class DepositController {
             "application/json",
             "application/x-www-form-urlencoded;charset=UTF-8"
     })
-    public Customer deposit(Customer customer, @RequestParam double amount) {
-        return depositService.deposit(customer, amount);
+    public Customer deposit(Customer customer, @RequestParam double amount, @RequestParam Long idSource) {
+        return depositService.deposit(customer, amount, idSource);
     }
 
     /**
@@ -66,8 +66,8 @@ public class DepositController {
      * @return The entities operation with the personal which do the withdrawal
      */
     @PutMapping(value = "/withdrawal/{code}")
-    public Operation withdrawal(@PathVariable String code) {
-        return this.depositService.withdrawal(code);
+    public Operation withdrawal(@PathVariable String code, @RequestParam Long idSource) {
+        return this.depositService.withdrawal(code, idSource);
     }
 
     /**

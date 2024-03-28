@@ -23,8 +23,9 @@ public class Operation {
     private double amount;
     private String code;
     private String codeWithdrawal;
-    private Date dateDeposit;
+    private Instant dateDeposit;
     private Instant dateWithdrawal;
+    private Instant dateModify;
     private boolean status=false;
 
     @Enumerated(EnumType.STRING)

@@ -7,6 +7,7 @@ import com.trustify.darktransfertdata.service.proxy.CustomerServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,19 @@ public class CustomerService implements CustomerServiceInterface {
 
     public List<Customer> findAllByOperationTypeAndOperationStatus(Operation type, boolean status){
         return this.customerRepository.findAllByOperationTypeAndOperationStatus(type, status);
+    }
+
+    public List<Customer> findAllByOrderByOperationDateModifyDesc() {
+        return this.customerRepository.findAllByOrderByOperationDateModifyDesc();
+    }
+
+    public List<Customer> findAllByFullnameContainingOrFullnameReceverContainingOrIdentifyContainingOrderByOperationDateModifyDesc(String fullname, String fullnameRecever, String identify) {
+        return this.customerRepository.findAllByFullnameContainingOrFullnameReceverContainingOrIdentifyContainingOrderByOperationDateModifyDesc(fullname, fullnameRecever, identify);
+    }
+
+    public Customer findFirstByOrderByOperationDateModifyDesc() {
+        Optional<Customer> optionalCustomer = this.customerRepository.findFirstByOrderByOperationDateModifyDesc();
+        return optionalCustomer.orElse(null);
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.util.List;
 
 @Controller
@@ -54,6 +55,21 @@ public class CustomerController {
             @RequestParam(required = false) boolean status
     ){
         return this.customerService.findAllByOperationTypeAndOperationStatus(type,status);
+    }
+
+    @GetMapping("/customer/dateModifyDesc")
+    public List<Customer> findAllByOrderByOperationDateModifyDesc() {
+        return this.customerService.findAllByOrderByOperationDateModifyDesc();
+    }
+
+    @GetMapping("/customer/dateModifyDesc/1")
+    public Customer findFirstByOrderByOperationDateModifyDesc() {
+        return this.customerService.findFirstByOrderByOperationDateModifyDesc();
+    }
+
+    @GetMapping("/customer/sort")
+    public List<Customer> findAllByFullnameContainingOrFullnameReceverContainingOrIdentifyContainingOrderByOperationDateModifyDesc(@RequestParam String fullname, @RequestParam String fullnameRecever, @RequestParam String identify) {
+        return this.customerService.findAllByFullnameContainingOrFullnameReceverContainingOrIdentifyContainingOrderByOperationDateModifyDesc(fullname, fullnameRecever, identify);
     }
 
 }

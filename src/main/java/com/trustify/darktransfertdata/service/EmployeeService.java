@@ -27,6 +27,7 @@ public class EmployeeService {
     public Employee findByUsername(String username) {
         Optional<Employee> employeeOptional = this.employeeRepository.findByUsername(username);
         if (employeeOptional.isPresent()) {
+            System.out.println(employeeOptional.get());
             return employeeOptional.get();
         }
         throw new RuntimeException("Ce nom d'utilisateur ne correspond pas a un employee");
@@ -42,13 +43,27 @@ public class EmployeeService {
                 employee.setId(this.employeeRepository.findByUsername(username).get().getId());
                 employee.setDateRegister(Instant.now());
 
-                System.out.println(employee);
-
                 return this.employeeRepository.save(employee);
             } else
                 throw new RuntimeException("Cet identifiant ne correspond pas à une agence");
         } else
             throw new RuntimeException("Cet employee n'existe pas");
+    }
+
+    public Employee updateInformation(Employee employee) {
+        Optional<Employee> employeeOptional = this.employeeRepository.findByUsername(employee.getUsername());
+        if (employeeOptional.isPresent()) {
+            System.out.println(employeeOptional.get());
+            System.out.println(employee);
+            Employee employeeUpdate = employeeOptional.get();
+            employeeUpdate.setAddress(employee.getAddress());
+            employeeUpdate.setFullname(employee.getFullname());
+            employeeUpdate.setTelephone(employee.getTelephone());
+            employeeUpdate.setPassword(employee.getPassword());
+
+            return this.employeeRepository.save(employeeUpdate);
+        }
+        return null;
     }
 
     public Employee findEmployeeByUsernameAndPassword(String username, String password) {

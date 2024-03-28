@@ -36,6 +36,14 @@ public class EmployeeController {
         return this.employeeService.findByUsername(username);
     }
 
+    @PutMapping(value = "/update", consumes = {
+            "application/json",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+    })
+    public Employee updateInformation(Employee employee) {
+        return this.employeeService.updateInformation(employee);
+    }
+
     @GetMapping
     public Employee findEmployeeByUsernameAndPassword(
             @RequestParam String username,
