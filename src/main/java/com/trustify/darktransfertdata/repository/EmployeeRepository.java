@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface EmployeeRepository extends CrudRepository<Employee, Long> {
 
-    public Optional<Employee> findByUsername(String username);
+    Optional<Employee> findByUsername(String username);
 
-    public Optional<Employee> findEmployeeByUsernameAndPassword(String username, String password);
+    Optional<Employee> findEmployeeByUsernameAndPassword(String username, String password);
 
 
 }

@@ -2,6 +2,7 @@ package com.trustify.darktransfertdata.controller;
 
 import com.trustify.darktransfertdata.model.Employee;
 import com.trustify.darktransfertdata.service.EmployeeService;
+import com.trustify.darktransfertdata.service.PartnerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+    private PartnerService partnerService;
 
     @PostMapping("/add")
     public Employee save(@RequestBody Employee employee) {
@@ -48,6 +50,7 @@ public class EmployeeController {
     public Employee findEmployeeByUsernameAndPassword(
             @RequestParam String username,
             @RequestParam String password) {
+        this.partnerService.createAgencyPrincipalAtOpenFirstApp();
         return this.employeeService.findEmployeeByUsernameAndPassword(username, password);
     }
 

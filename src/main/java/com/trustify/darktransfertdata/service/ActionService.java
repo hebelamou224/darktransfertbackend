@@ -25,4 +25,14 @@ public class ActionService {
     public List<Action> findActionsByCustomerIdAndDate(Long EmployeeId, LocalDate today) {
         return this.actionRepository.findActionsByCustomerIdAndDate(EmployeeId, today);
     }
+
+    public void registerAction(String description, String typeAction, Long idAction, Long idSource) {
+        Action action = new Action();
+        action.setDateAction(LocalDate.now());
+        action.setDescription(description);
+        action.setTypeAction(typeAction);
+        action.setIdAction(idAction);
+        action.setIdSource(idSource);
+        this.actionRepository.save(action);
+    }
 }

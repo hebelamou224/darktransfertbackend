@@ -8,11 +8,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/partner",
         produces = {
-                MediaType.APPLICATION_JSON_VALUE,
+                "application/json",
         })
 public class PartnerController {
 
@@ -33,6 +35,11 @@ public class PartnerController {
     @GetMapping("/")
     public Iterable<Partner> findByAll() {
         return this.partnerService.findByAll();
+    }
+
+    @GetMapping("")
+    public List<Partner> findAllByFullnameContainingOrTelephoneContainingOrderByIdDesc(@RequestParam String searchValue) {
+        return this.partnerService.findAllByFullnameContainingOrTelephoneContainingOrderByIdDesc(searchValue, searchValue, searchValue);
     }
 
     @PutMapping(value = "/addEmployeeToAgency/{username}", consumes = {

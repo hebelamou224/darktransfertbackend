@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface OperationRepository extends CrudRepository<Operation, Long> {
-    public Optional<Operation> findByCode(String code);
+    Optional<Operation> findByCode(String code);
     public List<Operation> findAllByType(com.trustify.darktransfertdata.Operation type);
     public Optional<Operation> findOperationByCodeWithdrawal(String codeWithdrawal);
 

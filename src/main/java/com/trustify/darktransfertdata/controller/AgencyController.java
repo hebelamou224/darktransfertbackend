@@ -33,8 +33,13 @@ public class AgencyController {
     }
 
     @PutMapping("/{identifyAgency}")
-    public Agency depositOnAccountAgency(@PathVariable String identifyAgency, @RequestParam String usernamePartner, @RequestParam double amount) {
-        return this.partnerService.depositOnAccountAgency(usernamePartner, identifyAgency, amount);
+    public Agency depositOnAccountAgency(
+            @PathVariable String identifyAgency,
+            @RequestParam String usernamePartner,
+            @RequestParam double amount,
+            @RequestParam Long idSource
+    ) {
+        return this.partnerService.depositOnAccountAgency(usernamePartner, identifyAgency, amount, idSource);
     }
 
     @PutMapping(value = "/update/{identityAgency}", consumes = {
@@ -48,6 +53,11 @@ public class AgencyController {
     @PutMapping("/updateAccount/{identityAgency}")
     public Agency updateOnAccountAgencyAfterOperation(@PathVariable String identityAgency, @RequestParam double amount, @RequestParam String type) {
         return this.agencyService.updateOnAccountAgencyAfterOperation(identityAgency, amount, type);
+    }
+
+    @PutMapping("/updateAccount/{identityAgency}/{idSource}/")
+    public Agency updateOnAccountMainAgencyAfterOperationWithdrawal(@PathVariable String identityAgency, @RequestParam double amount, @PathVariable Long idSource) {
+        return this.agencyService.updateOnAccountMainAgencyAfterOperation(identityAgency, amount, idSource);
     }
 
     @GetMapping()

@@ -23,6 +23,7 @@ public class OperationService {
     OperationRepository operationRepository;
     CustomerRepository customerRepository;
     private ActionRepository actionRepository;
+    private ActionService actionService;
 
     public String generateIdentifyCustomer(Customer customer){
         String date = new Date().toString()
@@ -53,13 +54,10 @@ public class OperationService {
         Customer customerSaved = customerRepository.save(customer);
 
         //Register action which done
-        Action action = new Action();
-        action.setDateAction(LocalDate.now());
-        action.setDescription("Depot d'argen d'une somme de " + amount + " GNF");
-        action.setTypeAction("DEPOT");
-        action.setIdAction(customerSaved.getId());
-        action.setIdSource(idSource);
-        this.actionRepository.save(action);
+        String description = "Depot d'argen d'une somme de " + amount + " GNF";
+        String typeAction = "DEPOT";
+        Long idAction = customerSaved.getId();
+        this.actionService.registerAction(description, typeAction, idAction, idSource);
 
         return customerSaved;
     }
@@ -100,13 +98,18 @@ public class OperationService {
                 op.setType(com.trustify.darktransfertdata.Operation.WITHDRAWAL);
 
                 //Register action which done
-                Action action = new Action();
+             /*   Action action = new Action();
                 action.setDateAction(LocalDate.now());
                 action.setDescription("Retrait d'argent d'une somme de " + op.getAmount() + " GNF");
                 action.setTypeAction("RETRAIT");
                 action.setIdAction(customerRepository.findByIdentify(code).orElseThrow().getId());
                 action.setIdSource(idSource);
-                this.actionRepository.save(action);
+                this.actionRepository.save(action);*/
+
+                String description = "Retrait d'argent d'une somme de " + op.getAmount() + " GNF";
+                String typeAction = "RETRAIT";
+                Long idAction = customerRepository.findByIdentify(code).orElseThrow().getId();
+                this.actionService.registerAction(description, typeAction, idAction, idSource);
 
                 return this.operationRepository.save(op);
             }else {
