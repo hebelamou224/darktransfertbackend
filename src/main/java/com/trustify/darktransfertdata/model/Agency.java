@@ -22,6 +22,7 @@ public class Agency {
     private String description;
     private String lieu;
     private double account;
+    private String owner;
 
     @OneToMany(targetEntity = Employee.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "agency_employee", referencedColumnName = "identify")

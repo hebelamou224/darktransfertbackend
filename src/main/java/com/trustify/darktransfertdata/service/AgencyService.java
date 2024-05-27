@@ -66,7 +66,7 @@ public class AgencyService {
             String description = "Retrait(sortie) dans l'agence principale d'une somme de " + amount + " GNF";
             String typeAction = "RETRAIT AGENCE";
             Long idAction = agencyOptional.get().getId();
-            this.actionService.registerAction(description, typeAction, idAction, idSource);
+            this.actionService.registerAction(description, typeAction, idAction, idSource, identifyAgency);
             return this.agencyRepository.save(agencyOptional.get());
         }
         return null;

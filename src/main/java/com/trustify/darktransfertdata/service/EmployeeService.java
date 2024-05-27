@@ -53,8 +53,6 @@ public class EmployeeService {
     public Employee updateInformation(Employee employee) {
         Optional<Employee> employeeOptional = this.employeeRepository.findByUsername(employee.getUsername());
         if (employeeOptional.isPresent()) {
-            System.out.println(employeeOptional.get());
-            System.out.println(employee);
             Employee employeeUpdate = employeeOptional.get();
             employeeUpdate.setAddress(employee.getAddress());
             employeeUpdate.setFullname(employee.getFullname());

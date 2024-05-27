@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface PartnerRepository extends CrudRepository<Partner, Long> {
     Optional<Partner> findByUsername(String username);
 
+    Optional<Partner> findByUsernameAndPassword(String username, String password);
+
     List<Partner> findAllByFullnameContainingOrTelephoneContainingOrUsernameContainingOrderByIdDesc(String fullname, String telephone, String username);
 }

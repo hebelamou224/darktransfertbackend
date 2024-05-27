@@ -1,5 +1,6 @@
 package com.trustify.darktransfertdata.model;
 
+import com.trustify.darktransfertdata.PartnerType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class Partner {
     private String address;
     private String telephone;
     private Instant dateRegister;
+    private String password;
+    @Enumerated(EnumType.STRING)
+    private PartnerType type;
 
     @OneToMany(targetEntity = Agency.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "partner_agency_fk", referencedColumnName = "username")

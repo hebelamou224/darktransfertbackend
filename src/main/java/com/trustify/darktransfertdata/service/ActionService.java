@@ -13,7 +13,7 @@ import java.util.List;
 public class ActionService {
     private ActionRepository actionRepository;
 
-    public List<Action> findActionByEmployeeId(Long EmployeeId) {
+    public Iterable<Action> findActionByEmployeeId(Long EmployeeId) {
         return this.actionRepository.findActionByEmployeeId(EmployeeId);
     }
 
@@ -26,13 +26,18 @@ public class ActionService {
         return this.actionRepository.findActionsByCustomerIdAndDate(EmployeeId, today);
     }
 
-    public void registerAction(String description, String typeAction, Long idAction, Long idSource) {
+    public Iterable<Action> findAllByIdentifyAgency(String identifyAgency) {
+        return this.actionRepository.findAllByIdentifyAgencyOrderByDateActionDesc(identifyAgency);
+    }
+
+    public void registerAction(String description, String typeAction, Long idAction, Long idSource, String identifyAgency) {
         Action action = new Action();
         action.setDateAction(LocalDate.now());
         action.setDescription(description);
         action.setTypeAction(typeAction);
         action.setIdAction(idAction);
         action.setIdSource(idSource);
+        action.setIdentifyAgency(identifyAgency);
         this.actionRepository.save(action);
     }
 }

@@ -1,6 +1,7 @@
 package com.trustify.darktransfertdata.service;
 
 import com.trustify.darktransfertdata.model.Action;
+import com.trustify.darktransfertdata.model.Agency;
 import com.trustify.darktransfertdata.model.Customer;
 import com.trustify.darktransfertdata.model.Operation;
 import com.trustify.darktransfertdata.repository.ActionRepository;
@@ -24,6 +25,7 @@ public class OperationService {
     CustomerRepository customerRepository;
     private ActionRepository actionRepository;
     private ActionService actionService;
+    private AgencyService agencyService;
 
     public String generateIdentifyCustomer(Customer customer){
         String date = new Date().toString()
@@ -38,7 +40,7 @@ public class OperationService {
                 date;
     }
 
-    public Customer deposit(Customer customer, double amount, Long idSource) {
+    public Customer deposit(Customer customer, double amount, Long idSource, String identifyAgency) {
 
         Operation operation = new Operation();
         customer.setIdentify(generateIdentifyCustomer(customer));
@@ -49,6 +51,8 @@ public class OperationService {
         operation.setCodeWithdrawal("");
         operation.setAmount(amount);
         operation.setType(com.trustify.darktransfertdata.Operation.DEPOSIT);
+        Agency agency = this.agencyService.findByIdentify(identifyAgency);
+        operation.setAgency(agency);
         customer.setOperation(operation);
 
         Customer customerSaved = customerRepository.save(customer);
@@ -57,7 +61,7 @@ public class OperationService {
         String description = "Depot d'argen d'une somme de " + amount + " GNF";
         String typeAction = "DEPOT";
         Long idAction = customerSaved.getId();
-        this.actionService.registerAction(description, typeAction, idAction, idSource);
+        this.actionService.registerAction(description, typeAction, idAction, idSource, identifyAgency);
 
         return customerSaved;
     }
@@ -109,7 +113,7 @@ public class OperationService {
                 String description = "Retrait d'argent d'une somme de " + op.getAmount() + " GNF";
                 String typeAction = "RETRAIT";
                 Long idAction = customerRepository.findByIdentify(code).orElseThrow().getId();
-                this.actionService.registerAction(description, typeAction, idAction, idSource);
+                this.actionService.registerAction(description, typeAction, idAction, idSource, op.getAgency().getIdentify());
 
                 return this.operationRepository.save(op);
             }else {

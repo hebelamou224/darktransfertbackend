@@ -27,8 +27,9 @@ public class Operation {
     private Instant dateWithdrawal;
     private Instant dateModify;
     private boolean status=false;
-
     @Enumerated(EnumType.STRING)
     private com.trustify.darktransfertdata.Operation type;
+    @ManyToOne
+    private Agency agency;
 
 }

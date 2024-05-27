@@ -56,8 +56,13 @@ public class OperationController {
             "application/json",
             "application/x-www-form-urlencoded;charset=UTF-8"
     })
-    public Customer deposit(Customer customer, @RequestParam double amount, @RequestParam Long idSource) {
-        return depositService.deposit(customer, amount, idSource);
+    public Customer deposit(
+            Customer customer,
+            @RequestParam double amount,
+            @RequestParam Long idSource,
+            @RequestParam String identifyAgency
+    ) {
+        return depositService.deposit(customer, amount, idSource, identifyAgency);
     }
 
     /**

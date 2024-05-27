@@ -16,7 +16,13 @@ public class ActionController {
     private ActionService actionService;
 
     @GetMapping()
-    public List<Action> findActionByEmployeeId(@RequestParam Long EmployeeId) {
+    public Iterable<Action> findActionByEmployeeId(
+            @RequestParam(required = false) Long EmployeeId,
+            @RequestParam(required = false) String identifyAgency
+    ) {
+        if (identifyAgency != null) {
+            return this.actionService.findAllByIdentifyAgency(identifyAgency);
+        }
         return this.actionService.findActionByEmployeeId(EmployeeId);
     }
 
@@ -29,4 +35,5 @@ public class ActionController {
     List<Action> findActionsByCustomerIdAndDate(@PathVariable Long EmployeeId, @RequestParam(required = false) LocalDate date) {
         return this.actionService.findActionsByCustomerIdAndDate(EmployeeId, Objects.requireNonNullElseGet(date, LocalDate::now));
     }
+
 }

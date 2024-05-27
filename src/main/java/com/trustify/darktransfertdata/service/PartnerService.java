@@ -1,10 +1,12 @@
 package com.trustify.darktransfertdata.service;
 
+import com.trustify.darktransfertdata.PartnerType;
 import com.trustify.darktransfertdata.model.Action;
 import com.trustify.darktransfertdata.model.Agency;
 import com.trustify.darktransfertdata.model.Employee;
 import com.trustify.darktransfertdata.model.Partner;
 import com.trustify.darktransfertdata.repository.AgencyRepository;
+import com.trustify.darktransfertdata.repository.EmployeeRepository;
 import com.trustify.darktransfertdata.repository.PartnerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class PartnerService {
     private PartnerRepository partnerRepository;
     private AgencyRepository agencyRepository;
     private ActionService actionService;
+    private EmployeeRepository employeeRepository;
 
     /**
      * when the application is first opened,
@@ -31,11 +34,13 @@ public class PartnerService {
      */
     public void createAgencyPrincipalAtOpenFirstApp() {
         if (this.partnerRepository.count() == 0) {
-            //Partner
+            //PartnerType
             String username = "darktransfert";
             String fullname = "Dark Transfert";
             String address = "Guinée Conakry";
             String telephone = "";
+            String passwordPartner = "password";
+            PartnerType type = PartnerType.MAIN;
             Instant dateRegister = Instant.now();
             List<Agency> agencies = new ArrayList<>();
 
@@ -46,7 +51,7 @@ public class PartnerService {
             String lieu = "Conakry";
             double account = 0.0;
             List<Employee> employees = new ArrayList<>();
-            Agency agency = new Agency(1L, identify, name, description, lieu, account, employees);
+            Agency agency = new Agency(1L, identify, name, description, lieu, account, "MAIN", employees);
 
             //Employee
             String usernameEmp = "dartransfert";
@@ -60,7 +65,7 @@ public class PartnerService {
             Employee employee = new Employee(1L, usernameEmp, fullnameEmp, addressEmp, telephoneEmp, dateRegisterEmp, role, identifyAgency, password);
 
             //Register informations
-            Partner partner = new Partner(null, username, fullname, address, telephone, dateRegister, agencies);
+            Partner partner = new Partner(null, username, fullname, address, telephone, dateRegister, passwordPartner, type, agencies);
             Partner parterMain = this.partnerRepository.save(partner);
             this.addAgencyForPartner(parterMain.getUsername(), agency);
             this.addEmployeeForAnAgency(parterMain.getUsername(), agency.getIdentify(), employee);
@@ -79,11 +84,15 @@ public class PartnerService {
         if (optionalPartner.isPresent())
             return "username_existe";
 
+        partner.setType(PartnerType.CUSTOMER);
         partner.setDateRegister(Instant.now());
         this.partnerRepository.save(partner);
         return "succes";
     }
 
+    public Optional<Partner> findByUsernameAndPassword(String username, String password) {
+        return this.partnerRepository.findByUsernameAndPassword(username, password);
+    }
     /**
      *Add an employee to an agency
      * @param usernamePartner the partner's username
@@ -92,6 +101,10 @@ public class PartnerService {
      * @return Return a partner with all these agencies and employee of each agency
      */
     public Partner addEmployeeForAnAgency(String usernamePartner, String identifyAgency, Employee employee) {
+
+        Optional<Employee> optionalEmployee = this.employeeRepository.findByUsername(employee.getUsername());
+        if (optionalEmployee.isPresent())
+            throw new RuntimeException("Ce nom d'utilisateur appartient deja a un employee");
 
         Optional<Partner> optionalPartner = this.partnerRepository.findByUsername(usernamePartner);
         if (optionalPartner.isPresent()) {
@@ -132,6 +145,11 @@ public class PartnerService {
         if (optionalPartner.isPresent()) {
             Partner partner = optionalPartner.get();
             List<Agency> agencies = partner.getAgencies();
+            if (partner.getType() == PartnerType.MAIN) {
+                agency.setOwner("MAIN");
+            } else {
+                agency.setOwner("CUSTOMER");
+            }
             agencies.add(agency);
             partner.setAgencies(agencies);
 
@@ -192,7 +210,7 @@ public class PartnerService {
                 description = "Rechargement d'un compte d'une agence de la somme de " + amount + " GNF";
                 typeAction = "DEPOT AGENCE";
             }
-            this.actionService.registerAction(description, typeAction, idAction, idSource);
+            this.actionService.registerAction(description, typeAction, idAction, idSource, identifyAgency);
 
 
             return agencies.get(i);

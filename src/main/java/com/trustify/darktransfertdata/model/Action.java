@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -24,4 +23,5 @@ public class Action {
     private String description;
     private String typeAction;
     private LocalDate dateAction;
+    private String identifyAgency;
 }

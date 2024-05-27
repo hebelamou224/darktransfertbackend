@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -41,6 +42,26 @@ public class PartnerController {
     public List<Partner> findAllByFullnameContainingOrTelephoneContainingOrderByIdDesc(@RequestParam String searchValue) {
         return this.partnerService.findAllByFullnameContainingOrTelephoneContainingOrderByIdDesc(searchValue, searchValue, searchValue);
     }
+
+    @PostMapping(
+            value = "/login",
+            produces = {
+                    "application/json",
+                    "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+            consumes = {
+                    "application/json",
+                    "application/x-www-form-urlencoded;charset=UTF-8"
+            }
+    )
+    public Partner findByUsernameAndPassword(Partner partner) {
+        Optional<Partner> optionalPartner = this.partnerService.findByUsernameAndPassword(
+                partner.getUsername(),
+                partner.getPassword()
+        );
+        return optionalPartner.orElse(null);
+    }
+
 
     @PutMapping(value = "/addEmployeeToAgency/{username}", consumes = {
             "application/json",
